@@ -18,15 +18,17 @@ class DriftBot(discord.Client):
     async def on_ready(self):
         print("Logged on as {0}".format(self.user))
         self.server = self.get_guild(SERVER_ID)
-        is_playing = False
         for member in self.server.members:
+            is_playing = False
             for activity in activities_of_interest:
-                if activity in [b.name for b in member.activities]: is_playing = True
-            if is_playing:
-                role = self.role_reserve(member)
+                if activity in [b.name for b in member.activities]: 
+                    is_playing = True
+            role = self.role_resolve(member)
+            if is_playing and role not in member.roles:
                 await member.add_roles(role)
-            else:
+            elif role in member.roles and not is_playing:
                 await member.remove_roles(role)
+        print("Completed update")
 
     async def on_message(self, message):
         print("Message from {0.author}: {0.content}".format(message))
