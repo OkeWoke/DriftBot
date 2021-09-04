@@ -74,6 +74,16 @@ class DriftBot(discord.Client):
         await self.stream_role_update_check(after, is_streaming)
         await self.playing_role_update_check(after, is_playing)
 
+    async def on_message(self, message):
+        if "!faq" in message.content.lower():
+            faqEmbed = discord.Embed()
+            faqEmbed.title = "Frequently Asked Questions"
+            faqEmbed.colour = discord.Colour.dark_blue()
+            faqEmbed.add_field(name="Looking for a track or car?", value="Please look in #cars-and-track-downloads or the linked spreadsheets in #servers-and-password", inline=False)
+            faqEmbed.add_field(name="Looking for the server password?", value="Please look in #servers-and-password", inline=False)
+            faqEmbed.add_field(name="Why was I kicked?", value="- Either your ping is greater than 300ms\n- you have an incorrect version of car or track used\n- You have not deleted/renamed the ai folder for the track")
+            faqEmbed.set_footer(text="Use !faq to display this message again.", icon_url=discord.Embed.Empty)
+            await message.channel.send(content=None, embed=faqEmbed)
 
 if __name__ == "__main__":
     token_file = open("token.txt", "r")
